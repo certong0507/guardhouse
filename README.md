@@ -11,7 +11,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 Google Maps API - Geolocation
 
 1. npm install --save @types/googlemaps
-2. copy <script src="http://maps.google.com/maps/api/js?key=AIzaSyACVPEfvD8Na20bk99r2fj5rbLEpVCbJP8"></script> into index.html
+2. copy <script src="http://maps.google.com/maps/api/js?key=xxx"></script> into index.html
 3. copy /// <reference types="@types/googlemaps" /> into component
 4. npm install --save @types/jquery
 5. npm install jquery --save
