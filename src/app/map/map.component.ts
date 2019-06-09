@@ -54,6 +54,15 @@ export class MapComponent implements OnInit {
         });
     }
 
+    clockIn(){
+        if (circleContainsLocation(new google.maps.LatLng(this.locations[5].lat, this.locations[5].lng), this.mapReturn.my_circle)) {
+            console.log('true');
+        }
+        else{
+            console.log('false');
+        }
+    }
+
 }
 
 interface location{
