@@ -1,5 +1,8 @@
 /// <reference types="@types/googlemaps" />
 import { Component, OnInit } from '@angular/core';
+// import * as RecordRTC from 'recordrtc';
+import { DomSanitizer } from '@angular/platform-browser';
+// import { MediaRecorder } from '@an'
 
 @Component({
   selector: 'app-map',
@@ -38,7 +41,80 @@ export class MapComponent implements OnInit {
         }
     ];
 
-    constructor() { }
+    //Lets initiate Record OBJ
+    private record: any;
+    //Will use this flag for detect recording
+    private recording = false;
+    //Url of Blob
+    private url;
+    private error;
+    private mediaRecorder: any;
+    private audioChunks = [];
+
+    constructor(private domSanitizer: DomSanitizer) { }
+
+    sanitize(url:string){
+        return this.domSanitizer.bypassSecurityTrustUrl(url);
+    }
+
+    /**
+     * Start recording.
+     */
+    initiateRecording() {
+        
+        this.recording = true;
+        let mediaConstraints = {
+            video: false,
+            audio: true
+        };
+        navigator.mediaDevices.getUserMedia(mediaConstraints)
+            .then(stream => {
+                this.mediaRecorder = new MediaRecorder(stream);
+                
+                this.mediaRecorder.start();
+
+                this.mediaRecorder.addEventListener("dataavailable", event => {
+                    this.audioChunks.push(event.data);
+                    const audioBlob = new Blob(this.audioChunks);
+                    this.url = URL.createObjectURL(audioBlob);
+                });
+            });
+    }
+    /**
+     * Will be called automatically.
+     */
+    successCallback(stream) {
+        let options = {
+            mimeType: "audio/wav",
+            numberOfAudioChannels: 1
+        };
+        //Start Actuall Recording
+        // let StereoAudioRecorder = RecordRTC.StereoAudioRecorder;
+        // this.record = new StereoAudioRecorder(stream, options);
+        this.record.record();
+    }
+    /**
+     * Stop recording.
+     */
+    stopRecording() {
+        this.recording = false;
+        // this.record.stop(this.processRecording.bind(this));
+        this.mediaRecorder.stop();
+        
+    }
+    /**
+     * processRecording Do what ever you want with blob
+     * @param  {any} blob Blog
+     */
+    processRecording(blob) {
+        this.url = URL.createObjectURL(blob);
+    }
+    /**
+     * Process Error.
+     */
+    errorCallback(error) {
+        this.error = 'Can not play audio in your browser';
+    }
 
     ngOnInit() {
         renderGoogleMap().then(map =>{
