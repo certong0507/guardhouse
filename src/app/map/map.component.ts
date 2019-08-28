@@ -36,8 +36,12 @@ export class MapComponent implements OnInit {
             lng: 101.5949798,
         },
         {
-            lat: 2.9944132999999997,
-            lng: 101.4308028,
+            lat: 3.221552,
+            lng: 101.632551,
+        },
+        {
+            lat: 3.221420,
+            lng: 101.632651
         }
     ];
 
@@ -61,7 +65,7 @@ export class MapComponent implements OnInit {
      * Start recording.
      */
     initiateRecording() {
-        
+
         this.recording = true;
         let mediaConstraints = {
             video: false,
@@ -70,7 +74,7 @@ export class MapComponent implements OnInit {
         navigator.mediaDevices.getUserMedia(mediaConstraints)
             .then(stream => {
                 this.mediaRecorder = new MediaRecorder(stream);
-                
+
                 this.mediaRecorder.start();
 
                 this.mediaRecorder.addEventListener("dataavailable", event => {
@@ -100,7 +104,7 @@ export class MapComponent implements OnInit {
         this.recording = false;
         // this.record.stop(this.processRecording.bind(this));
         this.mediaRecorder.stop();
-        
+
     }
     /**
      * processRecording Do what ever you want with blob
@@ -119,7 +123,7 @@ export class MapComponent implements OnInit {
     ngOnInit() {
         renderGoogleMap().then(map =>{
             this.mapReturn = map;
-            //this.mapReturn.my_circle.radius = 500;
+            this.mapReturn.my_circle.radius = 10;
 
             // Stop Geolocation Watcher
             // $scope.$on('$ionicView.beforeLeave', function () {
@@ -131,7 +135,7 @@ export class MapComponent implements OnInit {
     }
 
     clockIn(){
-        if (circleContainsLocation(new google.maps.LatLng(this.locations[5].lat, this.locations[5].lng), this.mapReturn.my_circle)) {
+        if (circleContainsLocation(new google.maps.LatLng(this.locations[6].lat, this.locations[6].lng), this.mapReturn.my_circle)) {
             console.log('true');
         }
         else{
@@ -153,8 +157,7 @@ function create_google_map(selector: any, latlng: any) {
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         streetViewControl: false,
         mapTypeControl: false,
-        center: latlng,
-        zoom: 10,
+        center: latlng
     });
 };
 
@@ -167,7 +170,7 @@ function renderGoogleMap() {
     };
 
     // init map
-    let google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(3.116376, 101.5949798));
+    let google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(3.221440, 101.632691));
 
     let map = {
         map: google_map,
@@ -176,9 +179,9 @@ function renderGoogleMap() {
         cc_marker: null,
         watcher: 0
     };
-    
+
     navigator.geolocation.clearWatch(map.watcher);
-    //create watch location event to update current location 
+    //create watch location event to update current location
     map.watcher = navigator.geolocation.watchPosition(
         function (location) {
             let mapObj = map;
@@ -190,7 +193,7 @@ function renderGoogleMap() {
                 latlng: current_latlng,
                 self: true,
             });
-
+console.log("my_circle: ", mapObj.my_circle);
             mapObj.my_circle = createOrUpdateCircle({
                 map: mapObj.map,
                 circle: mapObj.my_circle,
@@ -200,10 +203,10 @@ function renderGoogleMap() {
             mapObj.cc_marker = createOrUpdateMarker({
                 map: mapObj.map,
                 marker: mapObj.cc_marker,
-                latlng: new google.maps.LatLng(3.116376, 101.5949798)
+                latlng: new google.maps.LatLng(3.221440, 101.632691)
             });
             setGoogleMapBoundary(map.map, [map.my_marker, map.cc_marker]);
-            
+
             dfd.resolve(map);
 
         },
@@ -214,7 +217,7 @@ function renderGoogleMap() {
             // }
 
             let mapObj = map;
-            let current_latlng = new google.maps.LatLng(3.116376, 101.5949798);
+            let current_latlng = new google.maps.LatLng(3.221440, 101.632691);
 
             mapObj.my_marker = createOrUpdateMarker({
                 map: mapObj.map,
@@ -232,10 +235,10 @@ function renderGoogleMap() {
             mapObj.cc_marker = createOrUpdateMarker({
                 map: mapObj.map,
                 marker: mapObj.cc_marker,
-                latlng: new google.maps.LatLng(3.116376, 101.5949798)
+                latlng: new google.maps.LatLng(3.221440, 101.632691)
             });
             setGoogleMapBoundary(map.map, [map.my_marker, map.cc_marker]);
-            
+
             dfd.resolve(map);
         }, geoOptions);
 
@@ -268,6 +271,10 @@ function createOrUpdateMarker(param: any) {
         {
             lat: 2.9944132999999997,
             lng: 101.4308028,
+        },
+        {
+            lat: 3.221440,
+            lng: 101.632691
         }
     ];
 
@@ -300,7 +307,7 @@ function createOrUpdateMarker(param: any) {
         //     }
         // })(marker, i));
         }
-            
+
     }
 
     return marker;
@@ -317,7 +324,7 @@ function createOrUpdateCircle(param: any) {
         fillOpacity: 0.35,      // Circle opacity
         map: param.map,         // Map object
         center: param.latlng,   // Lat long value
-        radius: 100,             // radius from centered lat lng. Value UOM in meters
+        radius: 10,             // radius from centered lat lng. Value UOM in meters
         clickable: true,           // for ad hoc purpose can click in the circle
     });
 };
@@ -359,6 +366,8 @@ function setGoogleMapBoundary(map: any, coords: any) {
 function circleContainsLocation(point: any, circle: any) {
     let radius = circle.getRadius();
     let center = circle.getCenter();
+    console.log("point: ", point);
+
     return (google.maps.geometry.spherical.computeDistanceBetween(point, center) <= radius);
 };
 
