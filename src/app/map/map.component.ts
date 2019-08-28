@@ -2,6 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 // import * as RecordRTC from 'recordrtc';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ToastrService } from 'ngx-toastr';
 // import { MediaRecorder } from '@an'
 
 @Component({
@@ -13,37 +14,40 @@ export class MapComponent implements OnInit {
 
     map: any;
     mapReturn: any;
-    locations: location[] = [
-        {
-            lat: 3.116376,
-            lng: 101.5949798,
-            iconUrl: 'assets/images/googlemap/current_location_marker.png'
-        },
-        {
-            lat: 3.216376,
-            lng: 101.5949798,
-        },
-        {
-            lat: 3.316376,
-            lng: 101.5949798,
-        },
-        {
-            lat: 3.416376,
-            lng: 101.5949798,
-        },
-        {
-            lat: 3.516376,
-            lng: 101.5949798,
-        },
-        {
-            lat: 3.221552,
-            lng: 101.632551,
-        },
-        {
-            lat: 3.221420,
-            lng: 101.632651
-        }
-    ];
+    targetLat: number;
+    targetLng: number;
+
+    // locations: location[] = [
+    //     {
+    //         lat: 3.116376,
+    //         lng: 101.5949798,
+    //         iconUrl: 'assets/images/googlemap/current_location_marker.png'
+    //     },
+    //     {
+    //         lat: 3.216376,
+    //         lng: 101.5949798,
+    //     },
+    //     {
+    //         lat: 3.316376,
+    //         lng: 101.5949798,
+    //     },
+    //     {
+    //         lat: 3.416376,
+    //         lng: 101.5949798,
+    //     },
+    //     {
+    //         lat: 3.516376,
+    //         lng: 101.5949798,
+    //     },
+    //     {
+    //         lat: 3.221552,
+    //         lng: 101.632551,
+    //     },
+    //     {
+    //         lat: 3.221420,
+    //         lng: 101.632651
+    //     }
+    // ];
 
     //Lets initiate Record OBJ
     private record: any;
@@ -55,7 +59,7 @@ export class MapComponent implements OnInit {
     private mediaRecorder: any;
     private audioChunks = [];
 
-    constructor(private domSanitizer: DomSanitizer) { }
+    constructor(private domSanitizer: DomSanitizer, private toastr: ToastrService) { }
 
     sanitize(url:string){
         return this.domSanitizer.bypassSecurityTrustUrl(url);
@@ -123,7 +127,7 @@ export class MapComponent implements OnInit {
     ngOnInit() {
         renderGoogleMap().then(map =>{
             this.mapReturn = map;
-            this.mapReturn.my_circle.radius = 10;
+            this.mapReturn.my_circle.radius = 1;
 
             // Stop Geolocation Watcher
             // $scope.$on('$ionicView.beforeLeave', function () {
@@ -135,11 +139,13 @@ export class MapComponent implements OnInit {
     }
 
     clockIn(){
-        if (circleContainsLocation(new google.maps.LatLng(this.locations[6].lat, this.locations[6].lng), this.mapReturn.my_circle)) {
+        if (circleContainsLocation(new google.maps.LatLng(this.targetLat, this.targetLng), this.mapReturn.my_circle)) {
             console.log('true');
+            this.toastr.success('Within targeted location.', 'Clock in successfully');
         }
         else{
             console.log('false');
+            this.toastr.error('Out of targeted location.', 'Clock in failed');
         }
     }
 
@@ -170,7 +176,7 @@ function renderGoogleMap() {
     };
 
     // init map
-    let google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(3.221440, 101.632691));
+    let google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(3.221500, 101.632805));
 
     let map = {
         map: google_map,
@@ -193,7 +199,7 @@ function renderGoogleMap() {
                 latlng: current_latlng,
                 self: true,
             });
-console.log("my_circle: ", mapObj.my_circle);
+
             mapObj.my_circle = createOrUpdateCircle({
                 map: mapObj.map,
                 circle: mapObj.my_circle,
@@ -203,7 +209,7 @@ console.log("my_circle: ", mapObj.my_circle);
             mapObj.cc_marker = createOrUpdateMarker({
                 map: mapObj.map,
                 marker: mapObj.cc_marker,
-                latlng: new google.maps.LatLng(3.221440, 101.632691)
+                latlng: new google.maps.LatLng(3.221500, 101.632805)
             });
             setGoogleMapBoundary(map.map, [map.my_marker, map.cc_marker]);
 
@@ -217,7 +223,7 @@ console.log("my_circle: ", mapObj.my_circle);
             // }
 
             let mapObj = map;
-            let current_latlng = new google.maps.LatLng(3.221440, 101.632691);
+            let current_latlng = new google.maps.LatLng(3.221500, 101.632805);
 
             mapObj.my_marker = createOrUpdateMarker({
                 map: mapObj.map,
@@ -235,7 +241,7 @@ console.log("my_circle: ", mapObj.my_circle);
             mapObj.cc_marker = createOrUpdateMarker({
                 map: mapObj.map,
                 marker: mapObj.cc_marker,
-                latlng: new google.maps.LatLng(3.221440, 101.632691)
+                latlng: new google.maps.LatLng(3.221500, 101.632805)
             });
             setGoogleMapBoundary(map.map, [map.my_marker, map.cc_marker]);
 
@@ -324,7 +330,7 @@ function createOrUpdateCircle(param: any) {
         fillOpacity: 0.35,      // Circle opacity
         map: param.map,         // Map object
         center: param.latlng,   // Lat long value
-        radius: 10,             // radius from centered lat lng. Value UOM in meters
+        radius: 1,             // radius from centered lat lng. Value UOM in meters
         clickable: true,           // for ad hoc purpose can click in the circle
     });
 };
@@ -366,8 +372,6 @@ function setGoogleMapBoundary(map: any, coords: any) {
 function circleContainsLocation(point: any, circle: any) {
     let radius = circle.getRadius();
     let center = circle.getCenter();
-    console.log("point: ", point);
-
     return (google.maps.geometry.spherical.computeDistanceBetween(point, center) <= radius);
 };
 

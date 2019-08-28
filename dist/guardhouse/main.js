@@ -122,12 +122,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppModule", function() { return AppModule; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _map_map_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./map/map.component */ "./src/app/map/map.component.ts");
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
+/* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
+/* harmony import */ var _map_map_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./map/map.component */ "./src/app/map/map.component.ts");
 
 
+
+
+// import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -136,17 +141,19 @@ var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_2__["NgModule"])({
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"])({
             declarations: [
-                _app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"],
-                _map_map_component__WEBPACK_IMPORTED_MODULE_5__["MapComponent"]
+                _app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"],
+                _map_map_component__WEBPACK_IMPORTED_MODULE_7__["MapComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
-                _app_routing_module__WEBPACK_IMPORTED_MODULE_3__["AppRoutingModule"]
+                _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"],
+                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_2__["BrowserAnimationsModule"],
+                ngx_toastr__WEBPACK_IMPORTED_MODULE_4__["ToastrModule"].forRoot(),
             ],
             providers: [],
-            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
+            bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_6__["AppComponent"]]
         })
     ], AppModule);
     return AppModule;
@@ -174,7 +181,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<script src=\"https://cdn.rawgit.com/webrtc/adapter/master/adapter.js\"></script>\n\n<h2>Here are the map: </h2>\n<button class=\"btn\"\n        (click)=\"clockIn()\"> Clock</button>\n<div style=\"width:100%;overflow:hidden;height:250px;max-width:100%;display: none;\">\n  <div id=\"my-map-canvas\"\n       style=\"height:100%; width:100%;max-width:100%;\"></div>\n  <style>\n    #my-map-canvas img {\n      max-width: none !important;\n      background: none !important;\n      font-size: inherit;\n    }\n  </style>\n</div>\n\n<!-- <a (click)=\"initiateRecording()\"\n   class=\"btn btn-primary\"\n   *ngIf=\"!recording\"> Start Recording </a>\n\n<a (click)=\"stopRecording()\"\n   class=\"btn btn-danger\"\n   *ngIf=\"recording\"> Stop Recording </a>\n\n<div class=\"clearfix\"></div>\n\n<audio controls=\"\"\n       *ngIf=\"url\">\n  <source [src]=\"sanitize(url)\"\n          type=\"audio/wav\">\n</audio> -->"
+module.exports = "<div class=\"container\">\n  <script src=\"https://cdn.rawgit.com/webrtc/adapter/master/adapter.js\"></script>\n\n  <div class=\"mt-4 mb-4 text-center\">\n    <h2>Geofencing Clock In</h2>\n  </div>\n\n  <div style=\"width:100%;overflow:hidden;height:400px;max-width:100%;\">\n    <div id=\"my-map-canvas\"\n         style=\"height:100%; width:100%;max-width:100%;\"></div>\n    <style>\n      #my-map-canvas img {\n        max-width: none !important;\n        background: none !important;\n        font-size: inherit;\n      }\n    </style>\n  </div>\n\n  <button type=\"button\"\n          class=\"btn btn-primary btn-block mt-4\"\n          (click)=\"clockIn()\"> Clock In</button>\n\n  <!-- <a (click)=\"initiateRecording()\"\n   class=\"btn btn-primary\"\n   *ngIf=\"!recording\"> Start Recording </a>\n\n<a (click)=\"stopRecording()\"\n   class=\"btn btn-danger\"\n   *ngIf=\"recording\"> Stop Recording </a>\n\n<div class=\"clearfix\"></div>\n\n<audio controls=\"\"\n       *ngIf=\"url\">\n  <source [src]=\"sanitize(url)\"\n          type=\"audio/wav\">\n</audio> -->\n</div>"
 
 /***/ }),
 
@@ -191,46 +198,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/platform-browser */ "./node_modules/@angular/platform-browser/fesm5/platform-browser.js");
+/* harmony import */ var ngx_toastr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ngx-toastr */ "./node_modules/ngx-toastr/fesm5/ngx-toastr.js");
 
 /// <reference types="@types/googlemaps" />
 
 // import * as RecordRTC from 'recordrtc';
 
+
 // import { MediaRecorder } from '@an'
 var MapComponent = /** @class */ (function () {
-    function MapComponent(domSanitizer) {
+    function MapComponent(domSanitizer, toastr) {
         this.domSanitizer = domSanitizer;
-        this.locations = [
-            {
-                lat: 3.116376,
-                lng: 101.5949798,
-                iconUrl: 'assets/images/googlemap/current_location_marker.png'
-            },
-            {
-                lat: 3.216376,
-                lng: 101.5949798,
-            },
-            {
-                lat: 3.316376,
-                lng: 101.5949798,
-            },
-            {
-                lat: 3.416376,
-                lng: 101.5949798,
-            },
-            {
-                lat: 3.516376,
-                lng: 101.5949798,
-            },
-            {
-                lat: 3.221552,
-                lng: 101.632551,
-            },
-            {
-                lat: 3.221420,
-                lng: 101.632651
-            }
-        ];
+        this.toastr = toastr;
         //Will use this flag for detect recording
         this.recording = false;
         this.audioChunks = [];
@@ -297,7 +276,7 @@ var MapComponent = /** @class */ (function () {
         var _this = this;
         renderGoogleMap().then(function (map) {
             _this.mapReturn = map;
-            _this.mapReturn.my_circle.radius = 10;
+            _this.mapReturn.my_circle.radius = 1;
             // Stop Geolocation Watcher
             // $scope.$on('$ionicView.beforeLeave', function () {
             //     navigator.geolocation.clearWatch($scope.map.watcher);
@@ -307,11 +286,13 @@ var MapComponent = /** @class */ (function () {
         });
     };
     MapComponent.prototype.clockIn = function () {
-        if (circleContainsLocation(new google.maps.LatLng(this.locations[6].lat, this.locations[6].lng), this.mapReturn.my_circle)) {
+        if (circleContainsLocation(new google.maps.LatLng(this.targetLat, this.targetLng), this.mapReturn.my_circle)) {
             console.log('true');
+            this.toastr.success('Within targeted location.', 'Clock in successfully');
         }
         else {
             console.log('false');
+            this.toastr.error('Out of targeted location.', 'Clock in failed');
         }
     };
     MapComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -320,7 +301,7 @@ var MapComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./map.component.html */ "./src/app/map/map.component.html"),
             styles: [__webpack_require__(/*! ./map.component.css */ "./src/app/map/map.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["DomSanitizer"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["DomSanitizer"], ngx_toastr__WEBPACK_IMPORTED_MODULE_3__["ToastrService"]])
     ], MapComponent);
     return MapComponent;
 }());
@@ -344,7 +325,7 @@ function renderGoogleMap() {
         enableHighAccuracy: true
     };
     // init map
-    var google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(3.221440, 101.632691));
+    var google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(3.221500, 101.632805));
     var map = {
         map: google_map,
         my_marker: null,
@@ -363,7 +344,6 @@ function renderGoogleMap() {
             latlng: current_latlng,
             self: true,
         });
-        console.log("my_circle: ", mapObj.my_circle);
         mapObj.my_circle = createOrUpdateCircle({
             map: mapObj.map,
             circle: mapObj.my_circle,
@@ -372,7 +352,7 @@ function renderGoogleMap() {
         mapObj.cc_marker = createOrUpdateMarker({
             map: mapObj.map,
             marker: mapObj.cc_marker,
-            latlng: new google.maps.LatLng(3.221440, 101.632691)
+            latlng: new google.maps.LatLng(3.221500, 101.632805)
         });
         setGoogleMapBoundary(map.map, [map.my_marker, map.cc_marker]);
         dfd.resolve(map);
@@ -382,7 +362,7 @@ function renderGoogleMap() {
         //     return false;
         // }
         var mapObj = map;
-        var current_latlng = new google.maps.LatLng(3.221440, 101.632691);
+        var current_latlng = new google.maps.LatLng(3.221500, 101.632805);
         mapObj.my_marker = createOrUpdateMarker({
             map: mapObj.map,
             marker: mapObj.my_marker,
@@ -397,7 +377,7 @@ function renderGoogleMap() {
         mapObj.cc_marker = createOrUpdateMarker({
             map: mapObj.map,
             marker: mapObj.cc_marker,
-            latlng: new google.maps.LatLng(3.221440, 101.632691)
+            latlng: new google.maps.LatLng(3.221500, 101.632805)
         });
         setGoogleMapBoundary(map.map, [map.my_marker, map.cc_marker]);
         dfd.resolve(map);
@@ -479,7 +459,7 @@ function createOrUpdateCircle(param) {
         fillOpacity: 0.35,
         map: param.map,
         center: param.latlng,
-        radius: 10,
+        radius: 1,
         clickable: true,
     });
 }
@@ -519,7 +499,6 @@ function setGoogleMapBoundary(map, coords) {
 function circleContainsLocation(point, circle) {
     var radius = circle.getRadius();
     var center = circle.getCenter();
-    console.log("point: ", point);
     return (google.maps.geometry.spherical.computeDistanceBetween(point, center) <= radius);
 }
 ;

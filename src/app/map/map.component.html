@@ -1,21 +1,27 @@
-<script src="https://cdn.rawgit.com/webrtc/adapter/master/adapter.js"></script>
+<div class="container">
+  <script src="https://cdn.rawgit.com/webrtc/adapter/master/adapter.js"></script>
 
-<h2>Here are the map: </h2>
-<button class="btn"
-        (click)="clockIn()"> Clock</button>
-<div style="width:100%;overflow:hidden;height:250px;max-width:100%;display: none;">
-  <div id="my-map-canvas"
-       style="height:100%; width:100%;max-width:100%;"></div>
-  <style>
-    #my-map-canvas img {
-      max-width: none !important;
-      background: none !important;
-      font-size: inherit;
-    }
-  </style>
-</div>
+  <div class="mt-4 mb-4 text-center">
+    <h2>Geofencing Clock In</h2>
+  </div>
 
-<!-- <a (click)="initiateRecording()"
+  <div style="width:100%;overflow:hidden;height:400px;max-width:100%;">
+    <div id="my-map-canvas"
+         style="height:100%; width:100%;max-width:100%;"></div>
+    <style>
+      #my-map-canvas img {
+        max-width: none !important;
+        background: none !important;
+        font-size: inherit;
+      }
+    </style>
+  </div>
+
+  <button type="button"
+          class="btn btn-primary btn-block mt-4"
+          (click)="clockIn()"> Clock In</button>
+
+  <!-- <a (click)="initiateRecording()"
    class="btn btn-primary"
    *ngIf="!recording"> Start Recording </a>
 
@@ -30,3 +36,4 @@
   <source [src]="sanitize(url)"
           type="audio/wav">
 </audio> -->
+</div>
