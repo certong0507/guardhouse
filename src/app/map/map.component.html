@@ -5,7 +5,32 @@
     <h2>Geofencing Clock In</h2>
   </div>
 
-  <div style="width:100%;overflow:hidden;height:400px;max-width:100%;">
+  <form [formGroup]="form">
+    <label for="radius">Radius</label>
+    <input type="text"
+           class="form-control"
+           id="radius"
+           formControlName="radius">
+
+    <label for="radius">Latitude</label>
+    <input type="text"
+           class="form-control"
+           id="radius"
+           formControlName="targetLat">
+
+    <label for="radius">Longitude</label>
+    <input type="text"
+           class="form-control"
+           id="radius"
+           formControlName="targetLng">
+  </form>
+
+  <button type="button"
+          class="btn btn-warning btn-block mt-4 mb-4"
+          (click)="refreshMap()"> Refresh Map</button>
+
+  <div class="mb-4"
+       style="width:100%;overflow:hidden;height:400px;max-width:100%;">
     <div id="my-map-canvas"
          style="height:100%; width:100%;max-width:100%;"></div>
     <style>
@@ -18,7 +43,7 @@
   </div>
 
   <button type="button"
-          class="btn btn-primary btn-block mt-4"
+          class="btn btn-primary btn-block mt-4 mb-4"
           (click)="clockIn()"> Clock In</button>
 
   <!-- <a (click)="initiateRecording()"
