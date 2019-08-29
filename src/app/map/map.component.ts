@@ -193,7 +193,7 @@ function renderGoogleMap(lat: number, lng: number, radius: number) {
   let geoOptions = {
     maximumAge: 5000,
     timeout: 0,
-    enableHighAccuracy: false
+    enableHighAccuracy: true
   };
   console.log("renderGoogleMap ... 1");
   // init map
@@ -265,7 +265,8 @@ function renderGoogleMap(lat: number, lng: number, radius: number) {
       setGoogleMapBoundary(map.map, [map.my_marker, map.cc_marker]);
 
       dfd.resolve(map);
-    }
+    },
+    geoOptions
   );
 
   return dfd.promise();
