@@ -143,10 +143,8 @@ export class MapComponent implements OnInit {
   }
 
   refreshMap(): void {
-    console.log("refreshMap 1...");
     renderGoogleMap(this.form.value.targetLat, this.form.value.targetLng, this.form.value.radius).then(
       map => {
-        console.log("refreshMap 2...", this.form.value.radius);
         this.mapReturn = map;
         this.mapReturn.my_circle.radius = this.form.value.radius;
       },
@@ -157,7 +155,6 @@ export class MapComponent implements OnInit {
   }
 
   clockIn() {
-    console.log("clockIn: ", this.form.value.targetLat, this.form.value.targetLng);
     if (
       circleContainsLocation(
         new google.maps.LatLng(this.form.value.targetLat, this.form.value.targetLng),
@@ -179,7 +176,6 @@ interface location {
 
 //Create google map
 function create_google_map(selector: any, latlng: any) {
-  console.log("create_google_map ... 1");
   return new google.maps.Map(selector, {
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     streetViewControl: false,
@@ -195,10 +191,9 @@ function renderGoogleMap(lat: number, lng: number, radius: number) {
     timeout: 0,
     enableHighAccuracy: true
   };
-  console.log("renderGoogleMap ... 1");
+
   // init map
   let google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(lat, lng));
-  console.log("renderGoogleMap ... 2");
   let map = {
     map: google_map,
     my_marker: null,
@@ -209,12 +204,11 @@ function renderGoogleMap(lat: number, lng: number, radius: number) {
 
   navigator.geolocation.clearWatch(map.watcher);
   //create watch location event to update current location
-  console.log("renderGoogleMap ... 3");
   map.watcher = navigator.geolocation.watchPosition(
     location => {
       let mapObj = map;
       let current_latlng = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
-      console.log("renderGoogleMap ... 4");
+
       mapObj.my_marker = createOrUpdateMarker({
         map: mapObj.map,
         marker: mapObj.my_marker,
@@ -229,7 +223,6 @@ function renderGoogleMap(lat: number, lng: number, radius: number) {
         radius: radius
       });
 
-      console.log("lat, lng: ", lat, lng);
       mapObj.cc_marker = createOrUpdateMarker({
         map: mapObj.map,
         marker: mapObj.cc_marker,
@@ -273,38 +266,7 @@ function renderGoogleMap(lat: number, lng: number, radius: number) {
 }
 
 function createOrUpdateMarker(param: any) {
-  console.log("createOrUpdateMarker ... 1");
   let marker: any;
-  //   let locations: location[] = [
-  //     {
-  //       lat: 3.116376,
-  //       lng: 101.5949798
-  //     },
-  //     {
-  //       lat: 3.216376,
-  //       lng: 101.5849798
-  //     },
-  //     {
-  //       lat: 3.316376,
-  //       lng: 101.5749798
-  //     },
-  //     {
-  //       lat: 3.416376,
-  //       lng: 101.6049798
-  //     },
-  //     {
-  //       lat: 3.516376,
-  //       lng: 101.6149798
-  //     },
-  //     {
-  //       lat: 2.9944132999999997,
-  //       lng: 101.4308028
-  //     },
-  //     {
-  //       lat: 3.22144,
-  //       lng: 101.632691
-  //     }
-  //   ];
 
   if (param.marker) param.marker.setMap(null);
 
