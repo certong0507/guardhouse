@@ -124,12 +124,12 @@ export class MapComponent implements OnInit {
     this.form = this._formBuilder.group({
       targetLat: [3.209087],
       targetLng: [101.616143],
-      radius: [""]
+      radius: [20]
     });
-    renderGoogleMap(this.form.value.targetLat, this.form.value.targetLng).then(
+    renderGoogleMap(this.form.value.targetLat, this.form.value.targetLng, this.form.value.radius).then(
       map => {
         this.mapReturn = map;
-        this.mapReturn.my_circle.radius = 1;
+        this.mapReturn.my_circle.radius = this.form.value.radius;
 
         // Stop Geolocation Watcher
         // $scope.$on('$ionicView.beforeLeave', function () {
@@ -143,10 +143,12 @@ export class MapComponent implements OnInit {
   }
 
   refreshMap(): void {
-    renderGoogleMap(this.form.value.targetLat, this.form.value.targetLng).then(
+    console.log("refreshMap 1...");
+    renderGoogleMap(this.form.value.targetLat, this.form.value.targetLng, this.form.value.radius).then(
       map => {
+        console.log("refreshMap 2...", this.form.value.radius);
         this.mapReturn = map;
-        this.mapReturn.my_circle.radius = 100;
+        this.mapReturn.my_circle.radius = this.form.value.radius;
       },
       err => {
         console.log(err);
@@ -177,6 +179,7 @@ interface location {
 
 //Create google map
 function create_google_map(selector: any, latlng: any) {
+  console.log("create_google_map ... 1");
   return new google.maps.Map(selector, {
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     streetViewControl: false,
@@ -185,17 +188,17 @@ function create_google_map(selector: any, latlng: any) {
   });
 }
 
-function renderGoogleMap(lat: number, lng: number) {
+function renderGoogleMap(lat: number, lng: number, radius: number) {
   let dfd = $.Deferred();
   let geoOptions = {
     maximumAge: 5000,
-    timeout: 10000,
-    enableHighAccuracy: true
+    timeout: 0,
+    enableHighAccuracy: false
   };
-
+  console.log("renderGoogleMap ... 1");
   // init map
   let google_map = create_google_map(document.getElementById("my-map-canvas"), new google.maps.LatLng(lat, lng));
-
+  console.log("renderGoogleMap ... 2");
   let map = {
     map: google_map,
     my_marker: null,
@@ -206,11 +209,12 @@ function renderGoogleMap(lat: number, lng: number) {
 
   navigator.geolocation.clearWatch(map.watcher);
   //create watch location event to update current location
+  console.log("renderGoogleMap ... 3");
   map.watcher = navigator.geolocation.watchPosition(
-    function(location) {
+    location => {
       let mapObj = map;
       let current_latlng = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
-
+      console.log("renderGoogleMap ... 4");
       mapObj.my_marker = createOrUpdateMarker({
         map: mapObj.map,
         marker: mapObj.my_marker,
@@ -221,7 +225,8 @@ function renderGoogleMap(lat: number, lng: number) {
       mapObj.my_circle = createOrUpdateCircle({
         map: mapObj.map,
         circle: mapObj.my_circle,
-        latlng: current_latlng
+        latlng: current_latlng,
+        radius: radius
       });
 
       console.log("lat, lng: ", lat, lng);
@@ -234,12 +239,7 @@ function renderGoogleMap(lat: number, lng: number) {
 
       dfd.resolve(map);
     },
-    function(err) {
-      // if (ionic.Platform.device().platform) {
-      //     dfd.reject(err);
-      //     return false;
-      // }
-
+    err => {
       let mapObj = map;
       let current_latlng = new google.maps.LatLng(lat, lng);
 
@@ -253,7 +253,8 @@ function renderGoogleMap(lat: number, lng: number) {
       mapObj.my_circle = createOrUpdateCircle({
         map: mapObj.map,
         circle: mapObj.my_circle,
-        latlng: current_latlng
+        latlng: current_latlng,
+        radius: radius
       });
 
       mapObj.cc_marker = createOrUpdateMarker({
@@ -271,6 +272,7 @@ function renderGoogleMap(lat: number, lng: number) {
 }
 
 function createOrUpdateMarker(param: any) {
+  console.log("createOrUpdateMarker ... 1");
   let marker: any;
   //   let locations: location[] = [
   //     {
@@ -304,7 +306,7 @@ function createOrUpdateMarker(param: any) {
   //   ];
 
   if (param.marker) param.marker.setMap(null);
-  console.log("param.self: ", param.self);
+
   if (param.self) {
     let icon = {
       url: "assets/images/googlemap/current_location_marker.png",
@@ -352,7 +354,7 @@ function createOrUpdateCircle(param: any) {
     fillOpacity: 0.35, // Circle opacity
     map: param.map, // Map object
     center: param.latlng, // Lat long value
-    radius: 100, // radius from centered lat lng. Value UOM in meters
+    radius: parseInt(param.radius), // radius from centered lat lng. Value UOM in meters
     clickable: true // for ad hoc purpose can click in the circle
   });
 }
