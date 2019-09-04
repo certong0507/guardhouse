@@ -154,13 +154,13 @@ export class MapComponent implements OnInit {
       fetch(url)
         .then(res => res.json())
         .then(res => {
-          console.log("res: ", res);
-
           if (res.status === "OK") {
-            const lat = res.results[0].geometry.location.lat;
-            const lng = res.results[0].geometry.location.lng;
+            this.form.patchValue({
+              targetLat: res.results[0].geometry.location.lat,
+              targetLng: res.results[0].geometry.location.lng
+            });
 
-            renderGoogleMap(lat, lng, this.form.value.radius).then(
+            renderGoogleMap(this.form.value.targetLat, this.form.value.targetLng, this.form.value.radius).then(
               map => {
                 this.mapReturn = map;
                 this.mapReturn.my_circle.radius = this.form.value.radius;
