@@ -4,6 +4,7 @@ import { Component, OnInit } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ToastrService } from "ngx-toastr";
 import { FormBuilder, FormGroup } from "@angular/forms";
+import { stringify } from "@angular/core/src/render3/util";
 // import { MediaRecorder } from '@an'
 
 @Component({
@@ -122,6 +123,7 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.form = this._formBuilder.group({
+      location: [""],
       targetLat: [3.209087],
       targetLng: [101.616143],
       radius: [20]
@@ -143,15 +145,38 @@ export class MapComponent implements OnInit {
   }
 
   refreshMap(): void {
-    renderGoogleMap(this.form.value.targetLat, this.form.value.targetLng, this.form.value.radius).then(
-      map => {
-        this.mapReturn = map;
-        this.mapReturn.my_circle.radius = this.form.value.radius;
-      },
-      err => {
-        console.log(err);
-      }
-    );
+    const location = this.form.value.location;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${location}&key=AIzaSyDw-WCo1VorJi8T4KcrzJyyJbI2GwRs070`;
+
+    if (location.length > 0) {
+      console.log("url: ", url);
+
+      fetch(url)
+        .then(res => res.json())
+        .then(res => {
+          console.log("res: ", res);
+
+          if (res.status === "OK") {
+            const lat = res.results[0].geometry.location.lat;
+            const lng = res.results[0].geometry.location.lng;
+
+            renderGoogleMap(lat, lng, this.form.value.radius).then(
+              map => {
+                this.mapReturn = map;
+                this.mapReturn.my_circle.radius = this.form.value.radius;
+              },
+              err => {
+                console.log(err);
+              }
+            );
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    } else {
+      alert("Location is required.")
+    }
   }
 
   clockIn() {

@@ -12,22 +12,28 @@
            id="radius"
            formControlName="radius">
 
-    <label for="radius">Target Latitude</label>
+    <label for="radius">Location</label>
+    <input type="text"
+           class="form-control mb-2"
+           id="location"
+           formControlName="location">
+
+    <!-- <label for="radius">Target Latitude</label>
     <input type="number"
            class="form-control mb-2"
-           id="radius"
+           id="targetLat"
            formControlName="targetLat">
 
     <label for="radius">Target Longitude</label>
     <input type="number"
            class="form-control"
-           id="radius"
-           formControlName="targetLng">
+           id="targetLng"
+           formControlName="targetLng"> -->
   </form>
 
   <button type="button"
           class="btn btn-warning btn-block mt-4 mb-4"
-          (click)="refreshMap()"> Refresh Map</button>
+          (click)="refreshMap()">Get Location</button>
 
   <div class="mb-4"
        style="width:100%;overflow:hidden;height:400px;max-width:100%;">
